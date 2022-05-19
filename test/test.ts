@@ -1,10 +1,12 @@
-import {DateTime} from "../src/datetime";
+import {DateTime, timezones, setDefaultTimezone} from "../src/index";
+
+// @ts-ignore
+setDefaultTimezone('UTC')
 
 let now = new DateTime();
 
-let tz = Intl.DateTimeFormat().resolvedOptions().timeZone
-
-let inAlgiers = now.toTimeZone('Africa/Algiers');
+// @ts-ignore
+let inAlgiers = now.tz("UTC");
 
 console.log(now);
 console.log(inAlgiers)
