@@ -1,5 +1,3 @@
-import {getOffset} from "./timezone";
-
 let defaultTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 export function getTimezoneOffset(timezone:string): number{
     // @ts-ignore
