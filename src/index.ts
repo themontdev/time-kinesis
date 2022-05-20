@@ -1,6 +1,11 @@
 import {getOffset} from "./timezone";
 
 let defaultTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+export function getTimezoneOffset(timezone:string): number{
+    // @ts-ignore
+    let found = list.find(tz => tz.utc.find(u => u == timezone));
+    return found.offset*60*60*1000;
+};
 
 export function setDefaultTimezone(timezone:timezones): void{
     defaultTimezone = timezone;
@@ -488,7 +493,7 @@ export class DateTime {
     };
 
     tzOffset(timezone: timezones): number {
-        return getOffset(timezone) - getOffset(this.timezone);
+        return getTimezoneOffset(timezone) - getTimezoneOffset(this.timezone);
     };
 
     tz(timezone: timezones): DateTime {
