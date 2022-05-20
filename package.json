@@ -26,14 +26,13 @@
   "author": "Thales Monteiro <tmontdev@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^2.6.1"
+    "typescript": "^2.6.1",
+    "ts-node": "^10.7.0"
   },
   "files": [
     "dist/index.js",
     "dist/index.d.ts",
     "dist/lib"
   ],
-  "dependencies": {
-    "ts-node": "^10.7.0"
-  }
+  "dependencies": {}
 }
