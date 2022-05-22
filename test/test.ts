@@ -1,13 +1,9 @@
-import {DateTime, timezones, setDefaultTimezone} from "../src/index";
+import {DateTime, timezones} from "../src/index";
+import {units} from "../src/units";
 
-// @ts-ignore
-setDefaultTimezone('UTC')
-
-let now = new DateTime();
-
-// @ts-ignore
-let inAlgiers = now.tz("UTC");
+let now = new DateTime().add(130, units.day).format('YYYY-MMMM-DD HH:mm:ss.sss z');
+let algiers = new DateTime().tz(timezones.Africa_Algiers).format('YYYY-MM-DD HH:mm:ss z')
 
 console.log(now);
-console.log(inAlgiers)
+console.log(algiers)
 console.log('teste')
