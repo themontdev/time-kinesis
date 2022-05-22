@@ -1,4 +1,4 @@
-import {getTimezoneOffset, getDefault as getDefaultTimezone, timezones} from "./timezones";
+import {getDefault as getDefaultTimezone, getTimezoneOffset, timezones} from "./timezones";
 import {units} from "./units";
 import {unitFactor} from "./unit.factor";
 import {format} from "./formatter";
@@ -33,23 +33,23 @@ export class DateTime {
     };
 
     tz(timezone: timezones): DateTime {
-        return new DateTime(this.date.getTime()+this.tzOffset(timezone), timezone)
+        return new DateTime(this.date.getTime() + this.tzOffset(timezone), timezone)
     };
 
     utc(): DateTime {
         return this.add(this.date.getTimezoneOffset(), units.minute);
     };
 
-    format(pattern: string):string{
+    format(pattern: string): string {
         return format(this, pattern);
-    }
+    };
 
     constructor(date?: string | number | Date, timezone: timezones = getDefaultTimezone()) {
         // @ts-ignore
 
         // @ts-ignore
         this.timezone = timezone;
-        if (!date && typeof date != 'number'){
+        if (!date && typeof date != 'number') {
             this.date = new Date();
             return
         }
