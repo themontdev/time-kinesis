@@ -1,6 +1,6 @@
 {
   "name": "time-kinesis",
-  "version": "0.0.3",
+  "version": "0.0.11",
   "description": "A simple and powerful node.js Library to control time",
   "main": "dist/index",
   "typings": "dist/index",
@@ -30,9 +30,7 @@
     "ts-node": "^10.7.0"
   },
   "files": [
-    "dist/index.js",
-    "dist/index.d.ts",
-    "dist/lib"
+    "dist/*"
   ],
   "dependencies": {}
 }
