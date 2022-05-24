@@ -1,5 +1,6 @@
 import {DateTime} from "./datetime";
-import {getTimezone, ITimezone} from "./timezones";
+import {getTimezone, ITimezone, timezones} from "./timezones";
+import {units} from "./units";
 
 const monthNames = {
     1: 'January',
@@ -16,10 +17,16 @@ const monthNames = {
     12: 'December'
 };
 const timezoneReplacers = {
-    ZZZ: (datetime: DateTime, timezone: ITimezone) => timezone.description,
-    ZZ: (datetime: DateTime, timezone: ITimezone) => timezone.name,
-    Z: (datetime: DateTime, timezone: ITimezone) => timezone.utc,
-    z: (datetime: DateTime, timezone: ITimezone) => timezone.offset,
+    ZZZZ: (datetime: DateTime, timezone: ITimezone) => timezone.description,
+    ZZZ: (datetime: DateTime, timezone: ITimezone) => timezone.name,
+    ZZ: (datetime: DateTime, timezone: ITimezone) => timezone.utc,
+    Z: (datetime: DateTime, timezone: ITimezone) => {
+        let tz = new DateTime(0).tz(timezones.UTC).add(Math.abs(timezone.offset), units.hours).format('HH:mm');
+        if(timezone.offset >= 0) return `+${tz}`;
+        return `-${tz}`;
+    },
+    z: (datetime: DateTime, timezone: ITimezone) => timezone.offset
+
 };
 
 const monthReplacers = {
@@ -98,24 +105,24 @@ const replacers = {
 };
 
 // @ts-ignore
-function desc  (arr) {
+function desc(arr) {
     // @ts-ignore
     return arr.sort((a, b) => {
         return b.index - a.index;
     });
 }
 
-const replaceDeadzones = (deadzones: any[], target: string):string => {
+const replaceDeadzones = (deadzones: any[], target: string): string => {
     let result = target.slice()
-    for(let deadzone of deadzones){
-        result = `${result.slice(0,deadzone.index)}${result.slice(deadzone.index+deadzone.length)}`;
+    for (let deadzone of deadzones) {
+        result = `${result.slice(0, deadzone.index)}${result.slice(deadzone.index + deadzone.length)}`;
     }
     return result;
 };
 
-const isDeadZone = (deadzones: any[], index: number)=>{
-    for(let deadzone of deadzones){
-        if(index >= deadzone.index && index <= (deadzone.index + deadzone.length)) return deadzone;
+const isDeadZone = (deadzones: any[], index: number) => {
+    for (let deadzone of deadzones) {
+        if (index >= deadzone.index && index <= (deadzone.index + deadzone.length)) return deadzone;
     }
     return;
 };
@@ -131,10 +138,11 @@ export function format(datetime: DateTime, pattern: string): string {
         let index = pattern.lastIndexOf(rep);
         while (index > -1) {
             let deadzone = isDeadZone(deadzones, index)
-            if(deadzone){
+            if (deadzone) {
                 index = pattern.slice(0, deadzone.index).lastIndexOf(rep);
                 continue;
-            };
+            }
+            ;
             let length = rep.length;
             deadzones.push({index, length})
             desc(deadzones)

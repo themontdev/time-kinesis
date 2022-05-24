@@ -1444,12 +1444,13 @@ export interface ITimezone {
     utc: string;
 };
 
-export function getTimezoneOffset(timezone:string): number{
+export function getTimezoneOffset(timezone: string): number {
     // @ts-ignore
     let found = list.find(tz => tz.utc.find(u => u == timezone));
-    return found.offset*60*60*1000;
+    return found.offset * 60 * 60 * 1000;
 };
-export function getTimezone(timezone:string): ITimezone{
+
+export function getTimezone(timezone: string): ITimezone {
     // @ts-ignore
     let found = list.find(tz => tz.utc.find(u => u == timezone));
     let {text, isdst, abbr, value, offset} = found;
@@ -1895,11 +1896,11 @@ export enum timezones {
 // @ts-ignore
 let defaultTimezone: timezones = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-export function getDefault():timezones {
+export function getDefault(): timezones {
     return defaultTimezone;
 };
 
-export function setDefault(timezone: timezones): void{
+export function setDefault(timezone: timezones): void {
     defaultTimezone = timezone;
     return;
 };
