@@ -68,7 +68,8 @@ function endOf(datetime: DateTime, unit: units) {
     // @ts-ignore
     let factor = unitFactor[unit];
     if (factor) {
-        let rest = datetime.unix() % factor;
+        // @ts-ignore
+        let rest = new DateTime(datetime.date, timezones.UTC).tz(nativeTimezone).unix() % factor;
         return new DateTime(datetime.unix() - rest + factor - 1, datetime.timezone);
     }
     if ([units.month, units.months].some(u => u == unit))
