@@ -1,6 +1,5 @@
 import {DateTime, timezones} from "../src/index";
-import {units} from "../src/units";
 
-let now = new DateTime().startOf()
+let now = new DateTime().tz(timezones.Africa_Algiers)
 
 console.log(now);

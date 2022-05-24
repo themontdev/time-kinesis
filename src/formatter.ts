@@ -31,15 +31,15 @@ const timezoneReplacers = {
 
 const monthReplacers = {
     // @ts-ignore
-    MMMM: (datetime: DateTime, timezone: ITimezone) => monthNames[(datetime.date.getMonth() + 1)],
+    MMMM: (datetime: DateTime, timezone: ITimezone) => monthNames[(datetime.getDate().getMonth() + 1)],
     // @ts-ignore
-    MMM: (datetime: DateTime, timezone: ITimezone) => monthNames[(datetime.date.getMonth() + 1)].slice(0, 3),
+    MMM: (datetime: DateTime, timezone: ITimezone) => monthNames[(datetime.getDate().getMonth() + 1)].slice(0, 3),
     // @ts-ignore
-    MM: (datetime: DateTime, timezone: ITimezone) => (datetime.date.getMonth() + 1).toString().padStart(2, '0'),
+    MM: (datetime: DateTime, timezone: ITimezone) => (datetime.getDate().getMonth() + 1).toString().padStart(2, '0'),
 
-    M: (datetime: DateTime, timezone: ITimezone) => datetime.date.getMonth() + 1,
+    M: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getMonth() + 1,
     Mo: (datetime: DateTime, timezone: ITimezone) => {
-        let month = datetime.date.getMonth() + 1;
+        let month = datetime.getDate().getMonth() + 1;
         if (month == 1) return `${month}st`;
         if (month == 2) return `${month}nd`;
         if (month == 3) return `${month}rd`;
@@ -48,27 +48,27 @@ const monthReplacers = {
 };
 
 const yearReplacers = {
-    YYYY: (datetime: DateTime, timezone: ITimezone) => datetime.date.getFullYear(),
-    YY: (datetime: DateTime, timezone: ITimezone) => datetime.date.getFullYear().toString().slice(2, 4)
+    YYYY: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getFullYear(),
+    YY: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getFullYear().toString().slice(2, 4)
 };
 
 const dayOfMonthReplacers = {
     // @ts-ignore
-    DD: (datetime: DateTime, timezone: ITimezone) => datetime.date.getDate().toString().padStart(2, '0'),
-    D: (datetime: DateTime, timezone: ITimezone) => datetime.date.getDate()
+    DD: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getDate().toString().padStart(2, '0'),
+    D: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getDate()
 };
 
 const hourReplacers = {
     // @ts-ignore
-    HH: (datetime: DateTime, timezone: ITimezone) => datetime.date.getHours().toString().padStart(2, '0'),
-    H: (datetime: DateTime, timezone: ITimezone) => datetime.date.getHours(),
+    HH: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getHours().toString().padStart(2, '0'),
+    H: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getHours(),
     h: (datetime: DateTime, timezone: ITimezone) => {
-        let hours = datetime.date.getHours();
+        let hours = datetime.getDate().getHours();
         if (hours <= 12) return hours;
         return hours - 12;
     },
     hh: (datetime: DateTime, timezone: ITimezone) => {
-        let hours = datetime.date.getHours();
+        let hours = datetime.getDate().getHours();
         // @ts-ignore
         if (hours <= 12) return hours.toString().padStart(2, '0');
         // @ts-ignore
@@ -78,19 +78,19 @@ const hourReplacers = {
 
 const minuteReplacers = {
     // @ts-ignore
-    mm: (datetime: DateTime, timezone: ITimezone) => datetime.date.getMinutes().toString().padStart(2, '0'),
-    m: (datetime: DateTime, timezone: ITimezone) => datetime.date.getMinutes(),
+    mm: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getMinutes().toString().padStart(2, '0'),
+    m: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getMinutes(),
 };
 
 const millisecondReplacers = {
     // @ts-ignore
-    sss: (datetime: DateTime, timezone: ITimezone) => datetime.date.getMilliseconds().toString().padStart(3, '0'),
+    sss: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getMilliseconds().toString().padStart(3, '0'),
 };
 
 const secondReplacers = {
     // @ts-ignore
-    ss: (datetime: DateTime, timezone: ITimezone) => datetime.date.getSeconds().toString().padStart(2, '0'),
-    s: (datetime: DateTime, timezone: ITimezone) => datetime.date.getSeconds()
+    ss: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getSeconds().toString().padStart(2, '0'),
+    s: (datetime: DateTime, timezone: ITimezone) => datetime.getDate().getSeconds()
 };
 
 const replacers = {
