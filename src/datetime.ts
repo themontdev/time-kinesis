@@ -164,36 +164,42 @@ export class DateTime {
     //Additionally, the precision unit can be used. If not, millisecond unit will be considered;
     isAfter(datetime: DateTime, precision: units = units.millisecond): boolean {
         if (precision == units.millisecond)
-            return datetime.unix() > this.unix();
+            return datetime.unix() < this.unix();
 
-        return datetime.startOf(precision).unix() > this.startOf(precision).unix();
+        return datetime.startOf(precision).unix() < this.startOf(precision).unix();
     };
 
     //isAfterOrEqual return true if this instance is after, or equal the given one;
     //Additionally, the precision unit can be used. If not, millisecond unit will be considered;
     isAfterOrEqual(datetime: DateTime, precision: units = units.millisecond): boolean {
         if (precision == units.millisecond)
-            return datetime.unix() >= this.unix();
+            return datetime.unix() <= this.unix();
 
-        return datetime.startOf(precision).unix() >= this.startOf(precision).unix();
+        return datetime.startOf(precision).unix() <= this.startOf(precision).unix();
     };
 
     //isBefore return true if this instance is before the given one;
     //Additionally, the precision unit can be used. If not, millisecond unit will be considered;
     isBefore(datetime: DateTime, precision: units = units.millisecond): boolean {
         if (precision == units.millisecond)
-            return datetime.unix() < this.unix();
+            return datetime.unix() > this.unix();
 
-        return datetime.startOf(precision).unix() < this.startOf(precision).unix();
+        return datetime.startOf(precision).unix() > this.startOf(precision).unix();
     };
 
     //isBeforeOrEqual return true if this instance is before, or equal the given one;
     //Additionally, the precision unit can be used. If not, millisecond unit will be considered;
     isBeforeOrEqual(datetime: DateTime, precision: units = units.millisecond): boolean {
         if (precision == units.millisecond)
-            return datetime.unix() <= this.unix();
+            return datetime.unix() >= this.unix();
 
-        return datetime.startOf(precision).unix() <= this.startOf(precision).unix();
+        return datetime.startOf(precision).unix() >= this.startOf(precision).unix();
+    };
+
+    diff(datetime: DateTime, precision: units = units.millisecond): number{
+        if (precision == units.millisecond)
+            return datetime.unix() - this.unix();
+        return datetime.startOf(precision).unix() - this.startOf(precision).unix();
     };
 
     toJSON(): string{
