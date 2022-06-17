@@ -133,7 +133,6 @@ export function format(datetime: DateTime, pattern: string): string {
     let deadzones: any[] = [];
     let replaces = [];
     for (let rep of Object.keys(replacers)) {
-
         if (!replaceDeadzones(deadzones, pattern).includes(rep)) continue;
         let index = pattern.lastIndexOf(rep);
         while (index > -1) {
@@ -142,7 +141,6 @@ export function format(datetime: DateTime, pattern: string): string {
                 index = pattern.slice(0, deadzone.index).lastIndexOf(rep);
                 continue;
             }
-            ;
             let length = rep.length;
             deadzones.push({index, length})
             desc(deadzones)
@@ -151,7 +149,6 @@ export function format(datetime: DateTime, pattern: string): string {
             index = pattern.slice(0, index).lastIndexOf(rep)
         }
     }
-
     let result = pattern.slice();
     desc(replaces)
     for (let replace of replaces) {

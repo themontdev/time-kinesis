@@ -1,5 +1,8 @@
-import {DateTime, timezones} from "../src/index";
+import {DateTime, units, datetime} from "../src/index";
 
-let now = new DateTime().tz(timezones.Africa_Algiers)
+let now = datetime();
+let nextMonth = now.add(7, units.month)
+
+let difference = now.diff(nextMonth, units.year)
 
 console.log(now);

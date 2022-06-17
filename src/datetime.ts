@@ -1,7 +1,7 @@
-import {getDefault as getDefaultTimezone, getTimezoneOffset, timezones} from "./timezones";
-import {units} from "./units";
-import {unitFactor} from "./unit.factor";
-import {format} from "./formatter";
+import { getDefault as getDefaultTimezone, getTimezoneOffset, timezones } from "./timezones";
+import { units } from "./units";
+import { unitFactor } from "./unit.factor";
+import { format } from "./formatter";
 
 let nativeTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -33,6 +33,30 @@ function endOfMonth(datetime: DateTime): DateTime {
 
 function endOfYear(datetime: DateTime): DateTime {
     return datetime.add(1, units.year).startOf(units.year).sub(1);
+};
+
+function yearDiff(from: DateTime, to: DateTime, considerTimezone: boolean = true): number {
+    let target = considerTimezone ? to.tz(from.timezone) : to;
+    return target.getDate().getFullYear() - from.getDate().getFullYear();
+};
+
+function monthDiff(from: DateTime, to: DateTime, considerTimezone: boolean = true): number {
+    let target = considerTimezone ? to.tz(from.timezone) : to;
+    let yearMonths = yearDiff(from, target, false) * 12;
+    return yearMonths + target.getDate().getMonth() - from.getDate().getMonth();
+};
+
+function diff(from: DateTime, to: DateTime, unit: units = units.millisecond, considerTimezone: boolean = true): number {
+    let target = considerTimezone ? to.tz(from.timezone) : to;
+    // @ts-ignore
+    let factor = unitFactor[unit];
+    if (factor)
+        return (target.unix() - from.unix()) / factor;
+    if ([units.month, units.months].some(u => u == unit))
+        return monthDiff(from, target, false);
+    if ([units.year, units.years].some(u => u == unit))
+        return yearDiff(from, target, false);
+    throw new Error(`cannot add unit ${unit}: kinesis not mapped`);
 };
 
 function add(datetime: DateTime, amount: number, unit: units = units.millisecond): DateTime {
@@ -75,10 +99,9 @@ function endOf(datetime: DateTime, unit: units) {
     if ([units.month, units.months].some(u => u == unit))
         return endOfMonth(datetime);
     if ([units.year, units.years].some(u => u == unit))
-        return endOfMonth(datetime);
+        return endOfYear(datetime);
     throw new Error(`cannot get start of unit ${unit}: kinesis not mapped`);
 };
-
 
 export class DateTime {
     private date: Date;
@@ -98,6 +121,10 @@ export class DateTime {
     //sub returns a new DateTime instance, subtracting the given time amount. The current DateTime instance will not be altered;
     sub(amount: number = 0, unit: units = units.millisecond): DateTime {
         return this.add(-amount, unit);
+    };
+
+    diff(datetime: DateTime, unit: units = units.millisecond, considerTimezone: boolean = true): number {
+        return diff(this, datetime, unit, considerTimezone);
     };
 
     //setTimezone alter the instance timezone to the given one;
@@ -155,7 +182,6 @@ export class DateTime {
     isEqual(datetime: DateTime, precision: units = units.millisecond): boolean {
         if (precision == units.millisecond)
             return datetime.unix() == this.unix();
-
         return this.startOf(precision).unix() == datetime.startOf(precision).unix();
     };
 
@@ -165,7 +191,6 @@ export class DateTime {
     isAfter(datetime: DateTime, precision: units = units.millisecond): boolean {
         if (precision == units.millisecond)
             return datetime.unix() < this.unix();
-
         return datetime.startOf(precision).unix() < this.startOf(precision).unix();
     };
 
@@ -174,7 +199,6 @@ export class DateTime {
     isAfterOrEqual(datetime: DateTime, precision: units = units.millisecond): boolean {
         if (precision == units.millisecond)
             return datetime.unix() <= this.unix();
-
         return datetime.startOf(precision).unix() <= this.startOf(precision).unix();
     };
 
@@ -183,7 +207,6 @@ export class DateTime {
     isBefore(datetime: DateTime, precision: units = units.millisecond): boolean {
         if (precision == units.millisecond)
             return datetime.unix() > this.unix();
-
         return datetime.startOf(precision).unix() > this.startOf(precision).unix();
     };
 
@@ -192,17 +215,10 @@ export class DateTime {
     isBeforeOrEqual(datetime: DateTime, precision: units = units.millisecond): boolean {
         if (precision == units.millisecond)
             return datetime.unix() >= this.unix();
-
         return datetime.startOf(precision).unix() >= this.startOf(precision).unix();
     };
 
-    diff(datetime: DateTime, precision: units = units.millisecond): number{
-        if (precision == units.millisecond)
-            return datetime.unix() - this.unix();
-        return datetime.startOf(precision).unix() - this.startOf(precision).unix();
-    };
-
-    toJSON(): string{
+    toJSON(): string {
         return this.format('YYYY-MM-DD HH:mm:ss.sss Z ZZ')
     }
 
@@ -226,14 +242,18 @@ export class DateTime {
             this.date = date;
         else
             this.date = new Date(date);
-
         return this;
     };
-    getDate():Date{
+
+    getDate(): Date {
         return this.date;
     }
 };
 
-DateTime.prototype.toString = function():string{
+DateTime.prototype.toString = function (): string {
     return this.format('YYYY-MM-DD HH:mm:ss.sss Z ZZ')
-}
+};
+
+export function datetime(...props: any[]): DateTime {
+    return new DateTime(...props);
+};
